@@ -1,0 +1,47 @@
+Ignacio Schuemer - Ischuemer@udesa.edu.ar
+
+
+1. Para desactivar la primera fase de la bomba recorrí las instrucciones correspondientes, entre
+las cuales se halla un string_compare al comienzo entre los registros rsi (que previamente sé 
+le guarda un dato que está en una cierta dirección de memoria) y rdi que contiene el input que 
+le pasamos por parámetro la función. Me guardé la dirección de memoria al string (char*) que 
+contenía el registro rsi y los pase como input para que la comparación de 0 y desactivar esta
+instancia.
+
+2. En esta fase, se presenta la función misterio que lo que hace es sumar la cantidad de bits 
+de un número (este número en decimal es la suma de los registros rdi + rax - 32). Se pide que 
+la suma de los 32 bits sea igual a 11 y que el segundo valor de la entrada sea negativo. Las
+operaciones se guardaban en los primeros 32 bits de los registros. 
+Se coloca como input el número 4127 junto con el -1, ya que input_misterio = 4127 + (-1) + 32 =
+4094 que en 32 bits es 0...0111111111110 con todos ceros al comienzo y con 11 unos. 
+Luego se realiza la operación xor entre ambos números y se pide que el resultado sea signado,
+por esto se coloca un número positivo y otro negativo como input.
+
+3. Para desactivar esta fase se tuvo en cuenta la lista de palabras.txt ya que dentro de la función
+phase_3 se utiliza este conjunto de palabras que busca la función readline. Luego este conjunto lo
+utiliza la función cuenta, que además recibe un string como input que pasamos como usuario a través
+registro rdi y debe estar en este conjunto. A partir de probar distintos inputs de palabras en 
+cuenta, observé que arrojaba diferentes valores según la palabra que se colocaba, este valor debía
+estar acotado en un cierto intervalo para que no explote la bomba (0 < num - 401 < 398) y además debe
+ser igual al segundo input de la fase. Por ello se seleccionó afilar 588, siendo 588 el output de la 
+función cuenta dada la palabra afilar.
+
+4. Al comienzo de la función de phase_4 se exige que la entrada sea un conjunto de 6 caracteres. 
+Se realiza un mapeo de caracteres que transforman la entrada caracter a caracter a otros 6 caracteres
+diferentes. Este conjunto transformado se compara con el string "chancho" por lo que fui buscando 
+la codificación de caracteres que lo conforman a partir de ir imprimiendo el contenido en memoria del
+registro rdi en formato string que contiene el input transformado y así comparar la entrada con la
+transformación. De esta forma logré mapear los caracteres requieridos: "c":"3" - "h":"k" - "a":"5" - 
+"n":"j" - "o":"j", para poder desactivar la fase. El input resultó ser: "3k5j18".
+
+5. Para poder acceder a esta fase, se tuvo que colocar una clave como 3er input de la fase 3, condición
+que se encuentra en phase_defused luego de fase 4. Pide que los inputs sean 3 y que además el 3ero sea
+"abrete_sesamo" ya que realiza un string_compare con mi entrada y ese string. La fase secreta consta de
+una estructura recursiva que modela un árbol binario de búsqueda. Esta estructura recursiva tiene el 
+parámetro del nodo actual (que tiene 2 hijos, excepto las hojas) y el valor que se esté buscando en el 
+árbol. Viendo las instrucciones y pasando como parámetro los distintos valores de los nodos, fui hallando 
+la relación entre moverse hacia la derecha (2 * fun7(ptr nodo_hijo, value) + 1) o izquierda 
+(2 * fun7(ptr nodo_hijo,value)) dentro del árbol, teniendo en cuenta que fun7 retorna 0 cuando se lo llama
+con un nodo y su propio valor. 
+El valor que me devuelve la salida esperada 7, es el valor 1001, que representa moverse en el árbol 3 veces
+hacia la derecha ( 7 = 2 ( 2 ( 0 + 1 ) + 1 ) + 1 ) hasta llegar al último nodo 1001.
