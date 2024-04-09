@@ -1,0 +1,69 @@
+Ignacio Schuemer - Ischuemer@udesa.edu.ar
+
+
+1. Para desactivar la primera fase de la bomba recorrí las instrucciones correspondientes, entre
+
+las cuales se halla un string compare al comienzo entre los registros rsi (que previamente sé 
+
+le guarda un dato que está en una cierta dirección de memoria) y rdi que contiene el input que 
+
+le pasamos por parámetro la función. Me guardé la dirección de memoria al string (char*) que 
+
+contenía el registro rsi y los pase como input para desactivar esta instancia.
+
+
+
+2. En esta fase, se presenta la función misterio que lo que hace es sumar la cantidad de bits 
+
+de un número (este número en decimal es la suma de los registros rdi + rax - 32). Se pide que 
+
+la suma de los bits sea igual a 11 y que el segundo valor de la entrada sea negativo realizando 
+
+ambas operaciones en 32 bits.
+
+Se coloca como input el número 4127 junto con el -1, ya que input_misterio = 4127 + (-1) + 32 =
+
+4094 que en 32 bits es 0...0111111111110 con todos ceros al comienzo y con 11 unos. 
+
+Luego se realiza la operación xor entre ambos números y al ser signado el resultado, se desactiva
+
+la fase.
+
+
+
+3. Para desactivar esta fase se tuvo en cuenta la lista de palabras.txt ya que dentro de la función
+
+phase_3 se utiliza este conjunto de palabras que busca la función readline. Luego este conjunto lo
+
+utiliza la función cuenta, que además recibe un string como input que pasamos como usuario a través
+
+registro rdi y debe estar en este conjunto. A partir de probar distintos inputs de palabras en 
+
+cuenta, observé que arrojaba diferentes valores según la palabra que se colocaba, este valor debía
+
+estar acotado en un cierto intervalo para que no explote la bomba y además debe ser igual al segundo
+
+input de la fase. Por ello se seleccionó afilar 588.
+
+
+
+4. Al comienzo de la función de phase_4 se exige que la entrada sea un conjunto de 6 caracteres. 
+
+Se realiza un mapeo de caracteres que transforman la entrada caracter a caracter a otros 6 caracteres
+
+diferentes. Este conjunto transformado se compara con el string "chancho" con por lo que fui buscando 
+
+la codificación de las letras que lo conforman y el input correspondiente resulto: "3k5j18".
+
+
+
+5. La fase secreta consta de una estructura recursiva que modela un árbol binario de búsqueda.
+
+Esta estructura recursiva consta del parámetro del nodo actual (que tiene 2 hijos) y el valor que se 
+
+esté buscando en el árbol. Pasando como parámetro los distintos valores de los nodos, fui hallando la 
+
+relación entre moverse hacia la derecha o izquierda dentro del árbol y encontré que el valor que me 
+
+devuelve la salida esperada 7, es el valor 1001.
+
